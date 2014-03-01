@@ -1,6 +1,9 @@
 // primes.cpp : Defines the entry point for the console application.
 //
 
+// Simplest method result:  13848 --    149993:      987369615
+// Avoid % 2       result:  13848 --    149993:      493940380
+
 #include <stdio.h>
 
 typedef __int64 int64;
@@ -14,8 +17,18 @@ int64 num_ops = 0;
 // Is the number a prime?
 bool is_prime(int n)
 {
+  num_ops++;
+  if (n == 2) {
+    return true;
+  }
+
+  num_ops++;
+  if (n % 2 == 0) {
+    return false;
+  }
+
   // Look at all the numbers between 2 and n
-  int i = 2;
+  int i = 3;
   while (i < n) {
 
     // If it devides evenly, it is not a prime '%' means remainder
@@ -25,7 +38,7 @@ bool is_prime(int n)
     }
 
     // Look at the next number
-    i++;
+    i+=2;
   }
 
   // If we get here, the number cannot be divided by any of the numbers
@@ -59,9 +72,11 @@ int main(int argc, char* argv[])
       count = count + 1;
 
       // Print, but only some of them
-      if (i > print_threshold) {
+      if (i > print_threshold || i < 1000) {
         printf("%7d -- %9d:  %13I64d\n", count, i, num_ops);
-        print_threshold += threshold_interval;
+        if (i > print_threshold) {
+          print_threshold += threshold_interval;
+        }
       }
     }
 
